@@ -11,18 +11,14 @@
 
 @implementation AddContact
 
-NSMutableSet * _objects2;
-
-NSArray * tableData;
-
 -(void) viewDidLoad{
     [super viewDidLoad];
     //self.navigationItem.leftBarButtonItem = self.;
     UIBarButtonItem * addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAddressBook)];
     self.navigationItem.rightBarButtonItem = addButton;
-    self.
-    _objects = [[NSMutableArray alloc] init];
-    
+    self._objects = [[NSMutableDictionary alloc] init];
+    self._objects2 = [[NSMutableArray alloc] init];
+    self._objects3 = [[NSMutableArray alloc] init];
 }
 
 - (void)listPeopleInAddressBook:(ABAddressBookRef)addressBook
@@ -113,17 +109,14 @@ NSArray * tableData;
         NSLog(@"  phone:%@", phoneNumber);
             [parray addObject: phoneNumber];
     }
-    puts("Before Add");
-    for (Person * tmp in self._objects){
-        [tmp getName];
-    }
-    puts("After Add");
     
     Person * p  =  [[Person alloc] initWithFirstName:firstName withLastName:lastName withPhoneNumbers:parray];
-    [self._objects addObject: [p copy]];
-    for (Person * tmp in self._objects){
-        [tmp getName];
-    }
+    ABRecordID abid = ABRecordGetRecordID(person);
+    NSNumber * rec = [NSNumber numberWithInt: (int) (abid) ];
+    [self._objects setObject:p forKey:rec ];
+
+    self._objects2 = [NSMutableArray arrayWithArray:[self._objects allValues]];
+    self._objects3 =[ NSMutableArray arrayWithArray:[self._objects allKeys]];
     [self.tableView reloadData];
 }
 -(NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -137,10 +130,16 @@ NSArray * tableData;
     if(cell==nil){
          cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:AddContactTableIdentifier];
     }
-    cell.textLabel.text = [[self._objects objectAtIndex:indexPath.row] getName];
-    printf("%lu\n",(unsigned long)[self._objects count]);
+    
+    cell.textLabel.text = [[self._objects2 objectAtIndex:indexPath.row] getName];
+    //printf("%lu\n",(unsigned long)[self._objects count]);
     return cell;
     
 }
-
+-(void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [self._objects removeObjectForKey: [self._objects3  objectAtIndex:indexPath.row]];
+    self._objects2 = [NSMutableArray arrayWithArray:[self._objects allValues]];
+    self._objects3 =[ NSMutableArray arrayWithArray:[self._objects allKeys]];
+    [self.tableView reloadData];
+}
 @end

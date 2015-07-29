@@ -14,7 +14,8 @@
 @interface AddContact : UITableViewController <ABPeoplePickerNavigationControllerDelegate>
 @property (nonatomic,strong) ABPeoplePickerNavigationController * addressBookController;
 @property (nonatomic,strong) NSMutableArray * arrContactsData;
-@property NSMutableOrderedSet * _objects;
-
+@property NSMutableDictionary * _objects;
+@property NSMutableArray * _objects2;
+@property NSMutableArray * _objects3;
 -(void) showAddressBook;
 @end
