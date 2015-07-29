@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		102D0FFB1B69173500A8C2B9 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 102D0FFA1B69173500A8C2B9 /* libsqlite3.dylib */; };
 		C03BDCA91B676187009495C0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = C03BDCA81B676187009495C0 /* main.m */; };
 		C03BDCAC1B676187009495C0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = C03BDCAB1B676187009495C0 /* AppDelegate.m */; };
 		C03BDCB21B676187009495C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C03BDCB01B676187009495C0 /* Main.storyboard */; };
@@ -31,6 +32,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		102D0FFA1B69173500A8C2B9 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		C03BDCA31B676187009495C0 /* safe_test3.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = safe_test3.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C03BDCA71B676187009495C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C03BDCA81B676187009495C0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -57,6 +59,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				102D0FFB1B69173500A8C2B9 /* libsqlite3.dylib in Frameworks */,
 				C0D2ACA11B687A170009EBA5 /* AddressBook.framework in Frameworks */,
 				C0D2ACA21B687A170009EBA5 /* AddressBookUI.framework in Frameworks */,
 			);
@@ -75,6 +78,7 @@
 		C03BDC9A1B676187009495C0 = {
 			isa = PBXGroup;
 			children = (
+				102D0FFA1B69173500A8C2B9 /* libsqlite3.dylib */,
 				C0D2AC9F1B687A170009EBA5 /* AddressBook.framework */,
 				C0D2ACA01B687A170009EBA5 /* AddressBookUI.framework */,
 				C03BDCA51B676187009495C0 /* safe_test3 */,
