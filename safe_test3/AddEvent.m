@@ -10,10 +10,8 @@
 
 @implementation AddEvent
 
-NSArray * tableData;
 -(void) viewDidLoad{
     [super viewDidLoad];
-    tableData = [NSArray arrayWithObjects:@"Egg Benedict",@"Mushroom Ristto",nil];
     datePicker = [[UIDatePicker alloc]init];
     datePicker.datePickerMode = UIDatePickerModeDateAndTime;
     [self.dateSelectionTextField setInputView:datePicker];
