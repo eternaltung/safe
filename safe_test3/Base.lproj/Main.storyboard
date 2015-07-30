@@ -76,6 +76,13 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Kde-Iv-lvT" id="ebk-Hh-maM">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GyR-Tm-Yrs">
+                                                    <rect key="frame" x="500" y="7" width="87" height="30"/>
+                                                    <state key="normal" title="Add Contact"/>
+                                                    <connections>
+                                                        <segue destination="6xh-ge-Gz4" kind="show" id="QIW-Qa-tc5"/>
+                                                    </connections>
+                                                </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Contact" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I3Z-UH-ryg">
                                                     <rect key="frame" x="17" y="-2" width="61" height="46"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
