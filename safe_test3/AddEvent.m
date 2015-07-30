@@ -9,6 +9,9 @@
 #import "AddEvent.h"
 #import "Database.h"
 
+#import "EventModel.h"
+#import "SqlHelper.h"
+
 @interface AddEvent()
 
 + (sqlite3 *)database;
@@ -18,8 +21,6 @@
 @property (strong, nonatomic) IBOutlet UITextField *date;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *freq;
 
-@property (strong, nonatomic) NSString *databasePath;
-@property (nonatomic) sqlite3 *eventsDB;
 
 @end
 
@@ -38,68 +39,8 @@
     [toolBar setItems: [NSArray arrayWithObjects:space,doneBtn,nil]];
     [self.dateSelectionTextField setInputAccessoryView:toolBar];
     
-    [self initDB];
-}
-
--(void)initDB{
-    BOOL write_success;
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSError *error;
-
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDictionary = [paths objectAtIndex:0];
-    NSString *writableDBPath = [documentsDictionary stringByAppendingPathComponent:@"events.sqlite"];
-    NSString *defaultDBPath = [[[NSBundle mainBundle]resourcePath]stringByAppendingPathComponent:@"events.sqlite"];
-    
-    if ([fileManager fileExistsAtPath: defaultDBPath ] == NO){
-        const char *dbpath = [defaultDBPath UTF8String];
-        if (sqlite3_open(dbpath, &_eventsDB) == SQLITE_OK){
-            char *errMsg;
-            const char *sql_stmt ="CREATE TABLE IF NOT EXISTS EVENTS (ID INTEGER PRIMARY KEY AUTOINCREMENT, EVENT_TITLE TEXT, EVENT_TIME TEXT, FREQ TEXT)";
-            if (sqlite3_exec(_eventsDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK){
-                NSLog(@"Failed to create table");
-            }else{
-                NSLog(@"create table successful");
-            }
-            sqlite3_close(_eventsDB);
-        } else {
-            NSLog(@"Failed to open/create database");
-        }
-    }else{
-        NSLog(@"file is not exsit at defaultdbpath");
-    }
-}
-
-
-- (IBAction)onButntest:(UIButton *)sender {
-    [self saveData:self];
-}
-
-- (void) saveData:(id)sender
-{
-    sqlite3_stmt *statement;
-    const char *dbpath = [_databasePath UTF8String];
-    
-    if (sqlite3_open(dbpath, &_eventsDB) == SQLITE_OK){
-        
-        NSString *insertSQL = [NSString stringWithFormat:
-                               @"INSERT INTO events (event_title, event_time, freq) VALUES (\"%@\", \"%@\",\"1\")",
-                               self.event_title.text, self.date.text];
-        const char *insert_stmt = [insertSQL UTF8String];
-        sqlite3_prepare_v2(_eventsDB, insert_stmt, -1, &statement, NULL);
-        if (sqlite3_prepare_v2(_eventsDB, insert_stmt, -1, &statement, NULL) != SQLITE_OK) {
-            NSLog(@"insert failed: %s", sqlite3_errmsg(_eventsDB));
-        }
-        if (sqlite3_step(statement) == SQLITE_DONE){
-            NSLog(@"Contact added");
-            self.event_title.text = @"";
-            self.date.text = @"";
-        } else {
-            NSLog(@"Failed to add contact");
-        }
-        sqlite3_finalize(statement);
-        sqlite3_close(_eventsDB);
-    }
+    SqlHelper *helper = [[SqlHelper alloc] init];
+    [helper createDB];
 }
 
 -(void) ShowSelectedDate{
@@ -123,5 +64,53 @@
     //cell.textLabel.text = [tableData objectAtIndex:indexPath.row];
     return cell;*/
 }
+
+
+-(void) showUIAlertWithMessage:(NSString*)message andTitle:(NSString*)title{
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title
+                                                    message:message
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
+    [alert show];
+    
+}
+
+- (IBAction)onFindBtn:(UIButton *)sender {
+
+    // delete example
+//    SqlHelper *helper =[[SqlHelper alloc] init];
+//    [helper createDB];
+//    [helper removeEvent:6];
+    
+    // select example
+//    SqlHelper *helper =[[SqlHelper alloc] init];
+//    [helper createDB];
+//    EventModel *event = [helper selectEvent:1];
+//    NSLog(@"%@", event.title);
+    
+    // select all example
+//    SqlHelper *helper = [[SqlHelper alloc] init];
+//    [helper createDB];
+//    [helper selectAllEvent];
+}
+
+- (IBAction)onButntest:(UIButton *)sender {
+
+    // insert example
+    EventModel *event = [[EventModel alloc]init];
+    event.title=self.event_title.text;
+    NSDateFormatter *format = [[NSDateFormatter alloc] init];
+    [format setDateFormat:@"yyyy/MM/dd hh:mm"];
+    [format setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
+    event.alarmTime = [format dateFromString:self.date.text];
+
+    SqlHelper *helper = [[SqlHelper alloc] init];
+    [helper createDB];
+    [helper insertEvent:event];
+    
+}
+
+
 
 @end
