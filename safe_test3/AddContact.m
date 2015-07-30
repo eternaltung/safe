@@ -10,17 +10,29 @@
 #import "Person.h"
 
 @implementation AddContact
-
+-(AddContact * ) initWithContacts:(NSMutableDictionary *)initialContacts{
+    self._objects =[[NSMutableDictionary alloc] initWithDictionary:initialContacts];
+    self._objects2 = [NSMutableArray arrayWithArray:[self._objects allValues]];
+    self._objects3 =[ NSMutableArray arrayWithArray:[self._objects allKeys]];
+    return self;
+}
 -(void) viewDidLoad{
     [super viewDidLoad];
     //self.navigationItem.leftBarButtonItem = self.;
     UIBarButtonItem * addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(showAddressBook)];
     self.navigationItem.rightBarButtonItem = addButton;
-    self._objects = [[NSMutableDictionary alloc] init];
-    self._objects2 = [[NSMutableArray alloc] init];
-    self._objects3 = [[NSMutableArray alloc] init];
+    UIBarButtonItem * saveButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSave target:self action:@selector(saveContacts)];
+    self.navigationItem.leftBarButtonItem = saveButton;
+    if(self._objects ==nil){
+        self._objects = [[NSMutableDictionary alloc] init];
+        self._objects2 = [[NSMutableArray alloc] init];
+        self._objects3 = [[NSMutableArray alloc] init];
+    }
+    
 }
-
+-(void) saveContacts{
+    [self.delegate childViewController:self updatePhoneNumbers:self._objects];    
+}
 - (void)listPeopleInAddressBook:(ABAddressBookRef)addressBook
 {
     NSArray *allPeople = CFBridgingRelease(ABAddressBookCopyArrayOfAllPeople(addressBook));
