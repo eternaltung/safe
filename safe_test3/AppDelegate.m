@@ -7,17 +7,44 @@
 //
 
 #import "AppDelegate.h"
+#import <CoreLocation/CoreLocation.h>
+#import "EventModel.h"
+#import "SqlHelper.h"
 
-@interface AppDelegate ()
-
+@interface AppDelegate () <CLLocationManagerDelegate>
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property (nonatomic, strong) SqlHelper *sqlhelper;
 @end
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    self.sqlhelper = [[SqlHelper alloc] init];
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
+    [self.locationManager requestAlwaysAuthorization];
+    [self.locationManager startUpdatingLocation];
     return YES;
+}
+
+//location update
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations{
+    CLLocation *location = [locations lastObject];
+    //NSLog(@"update%f",location.coordinate.latitude);
+    [self.sqlhelper createDB];
+    NSArray *array = [self.sqlhelper selectAllEvent];
+    
+    for (EventModel *item in array) {
+        if ([[[NSDate date] dateByAddingTimeInterval:28800] compare:item.alarmTime] == NSOrderedDescending) {
+            [manager stopUpdatingLocation];
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"http://smsserviceapi.azurewebsites.net/SendSMS?to=886979102172&msg=lat:%f,lon:%f&key=abcde",location.coordinate.latitude,location.coordinate.longitude]];
+            NSMutableURLRequest *request = [[NSMutableURLRequest alloc]initWithURL:url cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
+            [request setHTTPMethod:@"POST"];
+            //[[NSURLConnection alloc]initWithRequest:request delegate:self];
+            [self.sqlhelper removeEvent:item.ID];
+        }
+    }
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

@@ -39,6 +39,7 @@
     
     datePicker = [[UIDatePicker alloc]init];
     datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+    [datePicker setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"]];
     [self.dateSelectionTextField setInputView:datePicker];
     [self.dateSelectionTextField setInputAccessoryView:toolBar];
     
@@ -66,7 +67,7 @@
 }
 -(void) ShowSelectedDate{
     NSDateFormatter * formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"YYYY/MMM/dd hh:mm"];
+    [formatter setDateFormat:@"YYYY/MMM/dd HH:mm"];
     self.dateSelectionTextField.text =[NSString stringWithFormat:@"%@", [formatter stringFromDate: datePicker.date ] ];
     [self.dateSelectionTextField resignFirstResponder];
     self.eventTime = datePicker.date;
@@ -116,7 +117,7 @@
     EventModel *event = [[EventModel alloc]init];
     event.title=self.event_title.text;
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
-    [format setDateFormat:@"yyyy/MM/dd hh:mm"];
+    [format setDateFormat:@"yyyy/MM/dd HH:mm"];
     [format setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
     event.alarmTime = [format dateFromString:self.date.text];
 

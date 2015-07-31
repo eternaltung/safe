@@ -82,7 +82,7 @@
                 
                 char *time = (char *) sqlite3_column_text(statement, 2);
                 NSDateFormatter *format = [[NSDateFormatter alloc] init];
-                [format setDateFormat:@"yyyy-MM-dd hh:mm"];
+                [format setDateFormat:@"yyyy-MM-dd HH:mm"];
                 [format setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
                 result.alarmTime = [format dateFromString:[[NSString alloc] initWithUTF8String:time]];
                 
@@ -123,13 +123,14 @@
                 char *title = (char *) sqlite3_column_text(statement, 1);
                 char *time = (char *) sqlite3_column_text(statement, 2);
                 char *freq = (char *) sqlite3_column_text(statement, 3);
-                NSString *stime = [[NSString alloc] initWithUTF8String:time];
-                NSString *sfreq = [[NSString alloc] initWithUTF8String:freq];
+                //NSString *stime = [[NSString alloc] initWithUTF8String:time];
+                //NSString *sfreq = [[NSString alloc] initWithUTF8String:freq];
                 
                 event.ID = sqlite3_column_int(statement, 0);
                 event.title = [[NSString alloc] initWithUTF8String:title];
+                
                 NSDateFormatter *format = [[NSDateFormatter alloc] init];
-                [format setDateFormat:@"yyyy/MM/dd hh:mm"];
+                [format setDateFormat:@"YYYY-MM-dd HH:mm:ss ZZZZ"];
                 [format setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:8]];
                 event.alarmTime = [format dateFromString:[[NSString alloc] initWithUTF8String:time]];
                 
